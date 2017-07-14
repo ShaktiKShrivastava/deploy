@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<root>
+
+<System>
+    <Details ip="1.1.1.1" username="shakti1" password="1hello"/>
+	<Package source="C:\Users\qwohdw" destination="C:\Users\2932\wiqhfd"/>
+</System>
+
+<System>
+    <Details ip="2.2.2.2" username="shakti2" password="2hello"/>
+	<Package source="C:\Users\qwohdw" destination="C:\Users\2932\wiqhfd"/>
+</System>
+
+<System>
+    <Details ip="3.3.3.3" username="shakti3" password="3hello"/>
+	<Package source="C:\Users\qwohdw" destination="C:\Users\2932\wiqhfd"/>
+</System>
+
+</root>
+
