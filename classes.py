@@ -1,23 +1,24 @@
-import json
+import sys, json
 import paramiko
 
 class Server:
     def __init__(self, ip):
-        #username and password arent required
-        #self.username = uname
+        self.username = None
         self.ip = ip
-        #self.password = pwd
+        self.password = None
+        self.channel = None
+        print 'ip is ',self.ip,'\n\n\n\n'
         
     def connect(self, b):
-        self.client=paramiko.SSHClient()
-        self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.channel=paramiko.SSHClient()
+        self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         try:
-            self.client.connect(b.ip,22,b.username,b.password)
+            self.channel.connect(b.ip,22,b.username,b.password)
         except:
             print 'Either the destination is unavailable or there is something else trying to prevent this system from communicating with the remote system'
-    def disconnect(self, b):
+    def disconnect(self, destnComputer):
         try:
-            self.client.close()
+            self.channel.close()
         except:
             print 'Some Error Occurred'
 
@@ -31,11 +32,12 @@ class Client:
     #i is the ith client for which this object will be created
     def __init__(self, i):  
                 
-        with open(r'C:\Users\39232\Desktop\Project Files\configFileFinal.json') as data_file:
+        self.channel = None     #a channel to the same system which this object will denote
+        with open(sys.argv[1]) as data_file:
             data = json.load(data_file)
     
         
-        thisSystem = data['System'+str(i)]
+        thisSystem = data[i]
         thisSystemDetails = thisSystem['details']
         self.packages = thisSystem['packages']
         self.services = thisSystem['services']
@@ -50,11 +52,11 @@ class Client:
     
     def serviceStatus(self,servicename):
         
-        self.client=paramiko.SSHClient()
-        self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.client.connect(self.ip,22,self.username,self.password)
+        self.channel=paramiko.SSHClient()
+        self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.channel.connect(self.ip,22,self.username,self.password)
         
-        i,o,e=self.client.exec_command('net start')
+        i,o,e=self.channel.exec_command('net start')
     
         a = o.readlines()
         
@@ -62,11 +64,11 @@ class Client:
         
             if str(line).strip() == servicename:
                 #print servicename, ' status : running'
-                self.client.close()
+                self.channel.close()
                 return 1
         
         #print servicename, ' status : Stopped'
-        self.client.close()
+        self.channel.close()
         return 0
             
         

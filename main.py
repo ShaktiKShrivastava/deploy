@@ -2,17 +2,17 @@ import json, os
 import paramiko
 from classes import *
 
-def remoteCopy(a,b):
+def remoteCopy(srcComputer,destnComputer):
     
-    a.connect(b)
+    srcComputer.connect(destnComputer)
     
-    sftp = a.client.open_sftp()
-    for p in b.packages:
+    sftp = srcComputer.client.open_sftp()
+    for pkgs in destnComputer.packages:
             
         
-        print a
-        src = str(p['source'])
-        destn = str(p['destn'])
+        print srcComputer
+        src = str(pkgs['source'])
+        destn = str(pkgs['destn'])
         
         print src, destn
         
@@ -43,38 +43,38 @@ def remoteCopy(a,b):
             print '\n\nError while copying, the values retrived at error point were'
             print 'destn : ',destn,' root : ',root, 'name : ',name
 
-    a.disconnect(b)
+    srcComputer.disconnect(destnComputer)
 
-def startStopServices(a,b):
+def startStopServices(srcComputer,destnComputer):
     
     
     
-    for service in b.services:
+    for service in destnComputer.services:
         
-        a.connect(b)
+        srcComputer.connect(destnComputer)
         servicename = str(service['name'])
         action = str(service['action'])
         print servicename, ' to be ',action
         
         if action == 'start':
-            if b.serviceStatus(servicename) == 0:
+            if destnComputer.serviceStatus(servicename) == 0:
                 print servicename, ' successfully started'
-                a.client.exec_command('net start '+servicename+' /yes')
+                srcComputer.client.exec_command('net start '+servicename+' /yes')
             else:
                 print servicename,' is already running'
         elif action == 'stop':
-            if b.serviceStatus(servicename) == 1:
+            if destnComputer.serviceStatus(servicename) == 1:
                 print servicename, ' successfully stopped'
-                a.client.exec_command('net stop '+servicename+' /yes')
+                srcComputer.client.exec_command('net stop '+servicename+' /yes')
             else:
                 print servicename, ' was already stopped'
-        a.disconnect(b)
+        srcComputer.disconnect(destnComputer)
         
     
 if __name__ == '__main__':
     
-    a = Server('192.168.56.1')
-    b = Client(1)
+    a = Server(sys.argv[2])
+    b = Client(0)
     
     remoteCopy(a,b)
     startStopServices(a,b)

@@ -15,7 +15,7 @@ If you're lazy like me, you pass in the ''paramiko.AutoAddPolicy()'' which will 
 '''
 client1.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-client1.connect('192.168.56.102', username='IEUser', password='Passw0rd!')
+client1.connect('192.168.56.102',22, username='IEUser', password='Passw0rd!')
 sftp = client1.open_sftp()
 
 
