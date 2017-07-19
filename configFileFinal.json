@@ -3,7 +3,7 @@
 	{
 		"details":
 			{
-				"ip":"192.168.56.102",
+				"ip":"192.168.56.101",
 				"username":"IEUser",
 				"password":"Passw0rd!"
 			
@@ -22,10 +22,17 @@
 				"name":"pkg2"
 			}
 		],
-		"commands":[
-			"ls",
-			"cmd",
-			"ipconfig"
+		"msi":
+		[
+			{
+				"path":"C:\\Users\\39232\\Desktop\\1.msi"
+			},
+			{
+				"path":"C:\\Users\\39232\\Desktop\\VBScripts.msi"
+			},
+			{
+				"path":"C:\\Users\\Public\\Exp1.msi"
+			}
 		],
 		"services":[
 			
@@ -46,7 +53,7 @@
 			{
 				"ip":"1.1.1.1",
 				"username":"shaktiks",
-				"password":"pkg1"
+				"password":"system2password"
 			},
 		
 		"packages":
@@ -62,10 +69,17 @@
 				"name":"pkg2"
 			}
 		],
-		"commands":[
-			"ls",
-			"cmd",
-			"ipconfig"
+		"msi":
+		[
+			{
+				"path":"ls"
+			},
+			{
+				"path":"cmd"
+			},
+			{
+				"path":"ipconfig"
+			}
 		],
 		"services":[
 			
