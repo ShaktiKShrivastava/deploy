@@ -1,75 +1,76 @@
-import sys, json
+import sys, json, time
 import paramiko
+from parsing import *
 
-class Server:
-    def __init__(self, ip):
-        self.username = None
+class Machine:
+
+    def __init__(self, ip, uname=None, pwd=None):
         self.ip = ip
-        self.password = None
+        self.username = uname
+        self.password = pwd
         self.channel = None
-        print 'ip is ',self.ip,'\n\n\n\n'
-        
-    def connect(self, b):
+
+    def connect(self, destn):
         self.channel=paramiko.SSHClient()
         self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        try:
-            self.channel.connect(b.ip,22,b.username,b.password)
-        except:
-            print 'Either the destination is unavailable or there is something else trying to prevent this system from communicating with the remote system'
-    def disconnect(self, destnComputer):
+        self.channel.connect(destn.ip,22,destn.username,destn.password)
+        #print('Either the destination is unavailable or there is something else trying to prevent this system from communicating with the remote system')
+    
+    def disconnect(self, destn):
         try:
             self.channel.close()
         except:
-            print 'Some Error Occurred'
+            print('Some Error Occurred while disconnecting')
+    
+class Server(Machine):
+    def __init__(self, ip):
+        Machine.__init__(self,ip)
+        #print('ip is ',self.ip,'\n\n\n\n')
+            
 
-class Client:
+class Client(Machine):
     '''
     Takes the username, passwd, and ip of the system for which this object is being constructed
-    ip, username, password fields are private
     
     '''
     
     #i is the ith client for which this object will be created
-    def __init__(self, i):  
-                
-        self.channel = None     #a channel to the same system which this object will denote
-        with open(sys.argv[1]) as data_file:
-            data = json.load(data_file)
-    
+    def __init__(self, clientIndex):  
+        self.packages = []        
+        self.services = []
+        self.msis = []
+        self, ip, uname, pwd = parsing(self, clientIndex, sys.argv[1])
+        Machine.__init__(self, ip, uname, pwd)
+        print('start of client constructor\n')
+        '''
+        for el in self.packages:
+            print(el.src, el.destn, el.name)
+        for el in self.services:
+                print(el.name, el.action)
+        for el in self.msis:
+            print(el.path)
+        '''
+        print('destn system is :',self.ip, self.username, self.password)
+        print('end of client constructor\n')
+                                                                                                                                                                                                                                                                                                                                                                                                                         
         
-        thisSystem = data[i]
-        thisSystemDetails = thisSystem['details']
-        self.packages = thisSystem['packages']
-        self.services = thisSystem['services']
-        self.commands = thisSystem['commands']
-        self.ip = thisSystemDetails['ip']
-        self.username = thisSystemDetails['username']
-        self.password = thisSystemDetails['password']
-               
-    
     def checkValues(self):
-        print self.ip, self.username, self.password, self.packages, self.commands
+        print(self.ip, self.username, self.password, self.packages, self.commands)
     
     def serviceStatus(self,servicename):
-        
         self.channel=paramiko.SSHClient()
         self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.channel.connect(self.ip,22,self.username,self.password)
         
         i,o,e=self.channel.exec_command('net start')
-    
         a = o.readlines()
-        
         for line in a:
-        
             if str(line).strip() == servicename:
-                #print servicename, ' status : running'
+                #print(servicename, ' status : running')
                 self.channel.close()
                 return 1
         
-        #print servicename, ' status : Stopped'
+        #print(servicename, ' status : Stopped')
         self.channel.close()
         return 0
             
-        
-    
