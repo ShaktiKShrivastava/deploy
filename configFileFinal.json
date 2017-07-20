@@ -25,14 +25,12 @@
 		"msi":
 		[
 			{
-				"path":"C:\\Users\\39232\\Desktop\\1.msi"
+				"path":"C:\\Users\\39232\\Desktop\\shakti_kumar.msi"
 			},
 			{
-				"path":"C:\\Users\\39232\\Desktop\\VBScripts.msi"
-			},
-			{
-				"path":"C:\\Users\\Public\\Exp1.msi"
+				"path":"C:\\Users\\39232\\Desktop\\cab1.cab"
 			}
+			
 		],
 		"services":[
 			

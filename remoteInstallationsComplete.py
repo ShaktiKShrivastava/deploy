@@ -1,20 +1,25 @@
 import paramiko, os
+import subprocess
 
-ip = '192.168.56.102'
+ip = '192.168.56.101'
 username = 'IEUser'
 password = 'Passw0rd!'
 
 
 f = open(r'C:\Users\39232\Desktop\Project Files\installingCode.py','w')
-f.write('import subprocess\n')
-installationList = ['abba','jabba']
+f.write('import subprocess, time\n')
+installationList = [r'C:\Users\Public\Exp\shakti_kumar.msi','jabba']
 
 
 for el in installationList:
-    f.write('\ntry:\n\t')
-    f.write('subprocess.call(\'msiexec /i '+el+'\')\n')
-    f.write('except:\n\tprint \'program '+el+' failed to execute on the remote system\'')
+    #f.write('\ntry:\n\t')
+    f.write('\na = subprocess.call(r\'msiexec /i '+el+'\')\n')
+    f.write('time.sleep(2)\n')
+    f.write('if a!=0:\n\tprint\''+el+' failed to execute on the remote system\'\n')
+    f.write('else:\n\tprint\''+el+' successfully installed on the remote system\'\n')
 f.close()
+
+#subprocess.call(r'python "C:\Users\39232\Desktop\Project Files\installingCode.py"')
 
 
 client = paramiko.SSHClient()
@@ -31,5 +36,9 @@ client.connect(ip, 22, username, password)
 
 stdin, stdout, stderr = client.exec_command(r'C:/Python27/python C:/Users/Public/Exp/installingCode.py')
 
-print stdout.readlines()
-print stderr.readlines()
+output = stdout.readlines()
+error = stderr.readlines()
+if len(error) > 0:
+    print 'Error in excuting msis'
+for line in output:
+    print line
