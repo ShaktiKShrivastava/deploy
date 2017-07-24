@@ -1,8 +1,5 @@
-import sys
-import json
-import time
 import paramiko
-from parsing import *
+from fetchClientDetails import *
 
 class Machine:
 
@@ -32,11 +29,12 @@ class Client(Machine):
     '''Takes the username, passwd, and ip of the system for which this object is being constructed
     '''
    
-    def __init__(self, clientIndex):  
+    def __init__(self, configFileData, clientIP):  
         self.packages = []        
         self.services = []
         self.msis = []
-        self, ip, uname, pwd = parsing(self, clientIndex, sys.argv[1])
+        ip = clientIP
+        self, uname, pwd = fetchClientDetails(self, configFileData, clientIP)
         Machine.__init__(self, ip, uname, pwd)
         print('start of client constructor\n')
         print('destn system is :',self.ip, self.username, self.password)
@@ -53,7 +51,7 @@ class Client(Machine):
         i, o, e=self.channel.exec_command('net start')
         a = o.readlines()
         for line in a:
-            if str(line).strip() == servicename:
+            if str(line).strip().lower() == servicename.lower():
                 self.channel.close()
                 return 1
         self.channel.close()
