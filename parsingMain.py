@@ -1,9 +1,12 @@
 import json
+#need to import main also in order to use the global variable logFile
 
-def parsingFromDisk(configFile):
+def parsingFromDisk(configFile, logFile):
     #configFile = r"C:\Users\39232\Desktop\Project Files\configFileFinal.json"
+    #global logFile
     try:
-        print('parsing the config file started\n')
+        logFile.write('\nparsing the config file started')
+        print('\nparsing the config file started')
         with open(configFile) as data_file:
             data = json.load(data_file)
         
@@ -49,8 +52,12 @@ def parsingFromDisk(configFile):
             for s in mapping[el]['services']:
                 print s['name'], s['action']
     ''' 
+        logFile.write('\nparsing the config file ended')
         print('parsing the config file ended\n')
         
         return mapping
     except Exception as e:
+        logFile.write('\nError while processing the config file, error is\n'+str(e))
         print('Error while processing the config file, error is\n'+str(e))
+        logFile.write('\nProgram exited')
+        

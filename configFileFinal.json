@@ -42,10 +42,10 @@
 				
 					{
 						"name":"TokenBroker",
-						"action":"start"
+						"action":"stop"
 					},
 					{
-						"name":"Themes",
+						"name":"Server",
 						"action":"stop"
 					}
 			]

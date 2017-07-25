@@ -9,39 +9,43 @@ class Machine:
         self.password = pwd
         self.channel = None
 
-    def connect(self, destn):
-        self.channel=paramiko.SSHClient()
-        self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.channel.connect(destn.ip, 22, destn.username, destn.password)
-    
-    def disconnect(self, destn):
+    def connect(self, destn, logFile):
+        try:
+            self.channel=paramiko.SSHClient()
+            self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            self.channel.connect(destn.ip, 22, destn.username, destn.password)
+        except Exception as e:
+            print 'Error while connecting to ',destn.ip
+            logFile.write('\nError Occurred while connecting\n'+str(e))
+            
+    def disconnect(self, destn, logFile):
         try:
             self.channel.close()
-        except:
-            print('Some Error Occurred while disconnecting')
+        except Exception as e:
+            print('Error Occurred while disconnecting')
+            logFile.write('\nError Occurred while disconnecting\n'+str(e))
     
 
 class Server(Machine):
-    def __init__(self, ip):
+    def __init__(self, ip, logFile):
         Machine.__init__(self, ip)
             
 class Client(Machine):
     '''Takes the username, passwd, and ip of the system for which this object is being constructed
     '''
    
-    def __init__(self, configFileData, clientIP):  
+    def __init__(self, configFileData, clientIP, logFile):  
         self.packages = []        
         self.services = []
         self.msis = []
         ip = clientIP
-        self, uname, pwd = fetchClientDetails(self, configFileData, clientIP)
+        self, uname, pwd = fetchClientDetails(self, configFileData, clientIP, logFile)
         Machine.__init__(self, ip, uname, pwd)
-        print('start of client constructor\n')
+        logFile.write('\nClient '+str(clientIP)+' constructor started from classes.py file')
+        logFile.write('\ndestn system is :'+str(self.ip)+str(self.username)+str(self.password))
+        logFile.write('\nend of client constructor from classes.py\n')
         print('destn system is :',self.ip, self.username, self.password)
-        print('end of client constructor\n')
                                                                                                                                                                                                                                                                                                                                                                                                                          
-    def checkValues(self):
-        print(self.ip, self.username, self.password, self.packages, self.commands)
     
     def serviceStatus(self, servicename):
         self.channel=paramiko.SSHClient()
