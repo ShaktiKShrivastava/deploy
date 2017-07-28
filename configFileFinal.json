@@ -7,16 +7,16 @@
 			[
 				{
 					"source":"C:\\Users\\39232\\Desktop\\1",
-					"destn":"C:\\Users\\Public\\Exp1",
+					"destn":"C:\\Users\\Public\\Package1",
 					"name":"pkg1"
 				},
 				{
 					"source":"C:\\Users\\39232\\Desktop\\VBScripts",
-					"destn":"C:\\Users\\Public\\Exp2",
+					"destn":"C:\\Users\\Public\\Package2",
 					"name":"pkg2"
 				}
 			],
-			"msi":
+			"msis":
 			[
 				{
 					"path":"C:\\Users\\39232\\Desktop\\cab1.cab"
@@ -68,7 +68,7 @@
 					"name":"pkg2"
 				}
 			],
-			"msi":
+			"msis":
 			[
 				{
 					"path":"ls"
